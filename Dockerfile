@@ -16,7 +16,7 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     php7.0 php7.0-mcrypt php7.0-curl php7.0-common php7.0-gd \
     php7.0-dev php7.0-opcache php7.0-json php7.0-mysql php7.0-readline php7.0-xsl php7.0-xmlrpc \
     php7.0-intl php7.0-zip php7.0-soap php7.0-cli php7.0-xml php7.0-mbstring php7.0-bcmath php-redis \
-    php7.0-bz2 php7.0-imagick php7.0-xdebug \
+    php7.0-bz2 php7.0-imagick php7.0-xdebug vsftp \
     && apt-get remove -y php7.1-cli php7.1-common php7.1-json php7.1-readline php7.1-opcache libapache2-mod-php7.1 \
     && apt-get remove -y php7.2-cli php7.2-common php7.2-json php7.2-readline php7.2-opcache libapache2-mod-php7.2 \
     && phpenmod mcrypt xsl imagick xdebug \
