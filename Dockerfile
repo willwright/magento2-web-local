@@ -9,7 +9,7 @@ RUN export LC_ALL=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.
     && add-apt-repository ppa:ondrej/php \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
-    mysql-client software-properties-common
+    mysql-client software-properties-common \
     ntp build-essential build-essential binutils zlib1g-dev \
     git acl lzop unzip mcrypt expat xsltproc python-pip language-pack-en-base curl wget \
     apache2 apache2-utils libapache2-mod-php \
@@ -20,9 +20,8 @@ RUN export LC_ALL=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.
     && apt-get remove -y php7.1-cli php7.1-common php7.1-json php7.1-readline php7.1-opcache libapache2-mod-php7.1 \
     && apt-get remove -y php7.2-cli php7.2-common php7.2-json php7.2-readline php7.2-opcache libapache2-mod-php7.2 \
     && phpenmod mcrypt xsl imagick xdebug \
-        && a2enmod headers rewrite ssl expires php7.0 \
+    && a2enmod headers rewrite ssl expires php7.0 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
-    && mkdir /home/builder/.ssh \
 #
 #   Install Composer
 #
@@ -34,18 +33,6 @@ RUN export LC_ALL=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.
     && cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/
-
-#COPY files/builder_authorized_keys /home/builder/.ssh/authorized_keys
-
-#RUN chown -R builder:www-data /home/builder/.ssh && \
-#    chmod 700 /home/builder/.ssh && \
-#    chmod 600 /home/builder/.ssh/authorized_keys
-
-#COPY files/apache2-foreground /usr/local/bin/
-#RUN chmod +x /usr/local/bin/apache2-foreground
-
-#CMD bash /usr/local/bin/apache2-foreground
-
 
 #
 #   Install ionCube
