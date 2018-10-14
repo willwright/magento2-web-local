@@ -48,6 +48,12 @@ RUN phpenmod ioncube
 RUN rm -rf /etc/apache2/ports.conf /etc/apache2/sites-enabled/* /var/lib/apt/lists/*
 
 #
+#   Run apache in foreground
+#
+COPY files/apache2-foreground /usr/local/bin/
+RUN chmod +x /usr/local/bin/apache2-foreground
+
+#
 #   Inject config files at the end to optimize build cache
 #
 COPY etc/apache2/sites-available /etc/apache2/sites-available
@@ -74,5 +80,5 @@ COPY provision/xn98magerun2 /usr/local/bin/xn98magerun2
 RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98magerun2 /usr/local/bin/xn98magerun2
 
 EXPOSE 80
-RUN service apache2 restart
 WORKDIR /var/www/html/current
+CMD bash /usr/local/bin/apache2-foreground
