@@ -22,6 +22,7 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     && phpenmod mcrypt xsl imagick xdebug \
     && a2enmod headers rewrite ssl expires php7.0 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
+    && usermod -p password123 builder \
 #
 #   Install Composer
 #
@@ -58,6 +59,12 @@ RUN chown -R builder:www-data /var/www/html
 
 COPY configs/apache2/php.ini /etc/php/7.0/apache2/php.ini
 COPY configs/cli/php.ini /etc/php/7.0/cli/php.ini
+
+#
+#   VSFTPD configs
+#
+COPY configs/vsftpd.conf /etc/vsftpd.conf
+RUN service vsftpd restart
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
