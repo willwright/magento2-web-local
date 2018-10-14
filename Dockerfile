@@ -6,7 +6,7 @@ MAINTAINER Will Wright <signup@noimagination.com>
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN export LC_ALL=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
-    && add-apt-repository ppa:ondrej/php \
+    add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
     mysql-client software-properties-common \
