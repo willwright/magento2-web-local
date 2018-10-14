@@ -1,0 +1,3 @@
+
+#!/bin/bash
+su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=aws.solesociety.com'; php -d xdebug.remote_autostart=1 bin/magento $*" builder

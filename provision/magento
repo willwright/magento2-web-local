@@ -1,0 +1,2 @@
+#!/bin/bash
+su -s "/bin/bash" -c "bin/magento $*" builder

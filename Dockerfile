@@ -5,14 +5,14 @@ MAINTAINER Will Wright <signup@noimagination.com>
 # disable interactive functions
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN export LC_ALL=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
+RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
+    apt-get update && \
+    apt-get install -y --allow-unauthenticated software-properties-common ntp build-essential build-essential binutils \
+    zlib1g-dev python-pip language-pack-en-base curl wget git acl lzop unzip && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
-    mysql-client software-properties-common \
-    ntp build-essential build-essential binutils zlib1g-dev \
-    git acl lzop unzip mcrypt expat xsltproc python-pip language-pack-en-base curl wget \
-    apache2 apache2-utils libapache2-mod-php \
+    mysql-client mcrypt expat xsltproc apache2 apache2-utils libapache2-mod-php \
     php7.0 php7.0-mcrypt php7.0-curl php7.0-common php7.0-gd \
     php7.0-dev php7.0-opcache php7.0-json php7.0-mysql php7.0-readline php7.0-xsl php7.0-xmlrpc \
     php7.0-intl php7.0-zip php7.0-soap php7.0-cli php7.0-xml php7.0-mbstring php7.0-bcmath php-redis \
@@ -58,6 +58,13 @@ RUN chown -R builder:www-data /var/www/html
 
 COPY configs/apache2/php.ini /etc/php/7.0/apache2/php.ini
 COPY configs/cli/php.ini /etc/php/7.0/cli/php.ini
+
+COPY provision/magento /usr/local/bin/magento
+COPY provision/xmagento /usr/local/bin/xmagento
+COPY provision/n98magerun2 /usr/local/bin/n98magerun2
+COPY provision/xn98magerun2 /usr/local/bin/xn98magerun2
+
+RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98magerun2 /usr/local/bin/xn98magerun2
 
 EXPOSE 80
 RUN service apache2 restart
