@@ -64,7 +64,7 @@ COPY configs/cli/php.ini /etc/php/7.0/cli/php.ini
 #   VSFTPD configs
 #
 COPY configs/vsftpd.conf /etc/vsftpd.conf
-RUN service vsftpd restart
+#RUN service vsftpd restart
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
