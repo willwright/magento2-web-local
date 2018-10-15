@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated software-properties-common ntp build-essential build-essential binutils \
-    zlib1g-dev python-pip language-pack-en-base curl wget git acl lzop unzip && \
+    zlib1g-dev python-pip language-pack-en-base curl wget git acl lzop unzip nano && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
@@ -16,13 +16,13 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     php7.0 php7.0-mcrypt php7.0-curl php7.0-common php7.0-gd \
     php7.0-dev php7.0-opcache php7.0-json php7.0-mysql php7.0-readline php7.0-xsl php7.0-xmlrpc \
     php7.0-intl php7.0-zip php7.0-soap php7.0-cli php7.0-xml php7.0-mbstring php7.0-bcmath php-redis \
-    php7.0-bz2 php7.0-imagick php7.0-xdebug vsftpd \
+    php7.0-bz2 php7.0-imagick vsftpd \
     && apt-get remove -y php7.1-cli php7.1-common php7.1-json php7.1-readline php7.1-opcache libapache2-mod-php7.1 \
     && apt-get remove -y php7.2-cli php7.2-common php7.2-json php7.2-readline php7.2-opcache libapache2-mod-php7.2 \
-    && phpenmod mcrypt xsl imagick xdebug \
+    && phpenmod mcrypt xsl imagick \
     && a2enmod headers rewrite ssl expires php7.0 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
-    && usermod -p password123 builder \
+
 #
 #   Install Composer
 #
@@ -34,6 +34,8 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     && cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/
+
+RUN echo "root:password123" | chpasswd
 
 #
 #   Install ionCube
@@ -69,8 +71,9 @@ COPY configs/cli/php.ini /etc/php/7.0/cli/php.ini
 #
 #   VSFTPD configs
 #
+COPY configs/ftpusers /etc/ftpusers
 COPY configs/vsftpd.conf /etc/vsftpd.conf
-#RUN service vsftpd restart
+RUN service vsftpd start || true
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
