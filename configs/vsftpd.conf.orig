@@ -28,7 +28,7 @@ anonymous_enable=NO
 local_enable=YES
 #
 # Uncomment this to enable any form of FTP write command.
-write_enable=YES
+#write_enable=YES
 #
 # Default umask for local users is 077. You may wish to change this to 022,
 # if your users expect that (022 is used by most other ftpd's)
@@ -45,7 +45,7 @@ write_enable=YES
 #
 # Activate directory messages - messages given to remote users when they
 # go into a certain directory.
-#dirmessage_enable=YES
+dirmessage_enable=YES
 #
 # If enabled, vsftpd will display directory listings with the time
 # in  your  local  time  zone.  The default is to display GMT. The
@@ -153,6 +153,3 @@ ssl_enable=NO
 #
 # Uncomment this to indicate that vsftpd use a utf8 filesystem.
 #utf8_filesystem=YES
-#pasv_address=127.0.0.1
-pasv_min_port=21100
-pasv_max_port=21110
