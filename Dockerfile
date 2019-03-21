@@ -20,8 +20,11 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     && phpenmod mcrypt xsl imagick \
     && a2enmod headers rewrite ssl expires php7.2 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
-
-    # php7.2-mcrpyt
+    && update-alternatives --set php /usr/bin/php7.2 \
+    && update-alternatives --set phar /usr/bin/phar7.2 \
+    && update-alternatives --set phar.phar /usr/bin/phar.phar7.2 \
+    && update-alternatives --set phpize /usr/bin/phpize7.2 \
+    && update-alternatives --set php-config /usr/bin/php-config7.2 \
 
 #
 #   Install Composer
