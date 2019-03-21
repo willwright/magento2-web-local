@@ -40,9 +40,9 @@ RUN echo "root:password123" | chpasswd
 #
 #   Install ionCube
 #
-COPY ioncube /usr/lib/php/20151012
-COPY etc/php/7.2/mods-available/ioncube.ini /etc/php/7.2/mods-available/ioncube.ini
-RUN phpenmod ioncube
+#COPY ioncube /usr/lib/php/20151012
+#COPY etc/php/7.2/mods-available/ioncube.ini /etc/php/7.2/mods-available/ioncube.ini
+#RUN phpenmod ioncube
 
 #
 #   Delete prepackaged defaults
