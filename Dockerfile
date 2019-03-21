@@ -13,13 +13,15 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
     mysql-client mcrypt expat xsltproc apache2 apache2-utils libapache2-mod-php \
-    php7.2 php7.2-mcrypt php7.2-curl php7.2-common php7.2-gd \
+    php7.2 php7.2-curl php7.2-common php7.2-gd \
     php7.2-dev php7.2-opcache php7.2-json php7.2-mysql php7.2-readline php7.2-xsl php7.2-xmlrpc \
     php7.2-intl php7.2-zip php7.2-soap php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php-redis \
     php7.2-bz2 php7.2-imagick vsftpd \
     && phpenmod mcrypt xsl imagick \
     && a2enmod headers rewrite ssl expires php7.2 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
+
+    # php7.2-mcrpyt
 
 #
 #   Install Composer
