@@ -43,8 +43,8 @@ RUN echo "root:password123" | chpasswd
 #
 #   Configure SSH
 #
-COPY configs/sshd_config /etc/ssh/sshd_config
-RUN service ssh restart
+#COPY configs/sshd_config /etc/ssh/sshd_config
+#RUN service ssh restart
 
 #
 #   Install ionCube
