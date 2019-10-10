@@ -1,2 +1,2 @@
 #!/bin/bash
-su -s "/bin/bash" -c "bin/magento $*" builder
+su -s "/bin/bash" -c "bin/magento $*" www-data

@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Will Wright <signup@noimagination.com>
+MAINTAINER Will Wright <will@magesmith.com>
 
 # disable interactive functions
 ARG DEBIAN_FRONTEND=noninteractive
@@ -13,13 +13,12 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
     openssh-server mysql-client mcrypt expat xsltproc apache2 apache2-utils libapache2-mod-php \
-    php7.1 php7.1-curl php7.1-common php7.1-gd \
+    php7.1 php7.1-curl php7.1-common php7.1-gd php7.1-mcrypt \
     php7.1-dev php7.1-opcache php7.1-json php7.1-mysql php7.1-readline php7.1-xsl php7.1-xmlrpc \
     php7.1-intl php7.1-zip php7.1-soap php7.1-cli php7.1-xml php7.1-mbstring php7.1-bcmath php-redis \
-    php7.1-bz2 php7.1-imagick php7.1-xdebug vsftpd telnet \
+    php7.1-bz2 php7.1-imagick php7.1-xdebug telnet \
     && phpenmod mcrypt xsl imagick \
     && a2enmod headers rewrite ssl expires php7.1 \
-    && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
     && update-alternatives --set php /usr/bin/php7.1 \
     && update-alternatives --set phar /usr/bin/phar7.1 \
     && update-alternatives --set phar.phar /usr/bin/phar.phar7.1 \
@@ -37,21 +36,6 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     && cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/
-
-RUN echo "root:password123" | chpasswd
-
-#
-#   Configure SSH
-#
-#COPY configs/sshd_config /etc/ssh/sshd_config
-#RUN service ssh restart
-
-#
-#   Install ionCube
-#
-#COPY ioncube /usr/lib/php/20151012
-#COPY etc/php/7.2/mods-available/ioncube.ini /etc/php/7.2/mods-available/ioncube.ini
-#RUN phpenmod ioncube
 
 #
 #   Delete prepackaged defaults
@@ -77,20 +61,12 @@ COPY etc/php/7.1/mods-available/xdebug.ini etc/php/7.1/mods-available/xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 RUN phpenmod xdebug
 
-
 RUN a2ensite site site-ssl && service apache2 restart
 
-RUN chown -R builder:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 COPY configs/apache2/php.ini /etc/php/7.1/apache2/php.ini
 COPY configs/cli/php.ini /etc/php/7.1/cli/php.ini
-
-#
-#   VSFTPD configs
-#
-COPY configs/ftpusers /etc/ftpusers
-COPY configs/vsftpd.conf /etc/vsftpd.conf
-RUN service vsftpd restart || true
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
