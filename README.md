@@ -76,6 +76,8 @@ HTTPS listen port 443
 `DocumentRoot /var/www/html/current/pub/`
 
 ## Usage
+TODO Add Xdebug usage 
+
 There are four helper scripts that come pre-installed and registerd in $PATH
 * `magento`
 * `xmagento`
@@ -115,6 +117,7 @@ su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=aws.solesociety.com'; ph
 ```
 
 ## Extensibility
+TODO
 
 ## Tags
 `php-7.1`
