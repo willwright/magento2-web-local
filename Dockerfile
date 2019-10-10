@@ -13,18 +13,18 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated \
     openssh-server mysql-client mcrypt expat xsltproc apache2 apache2-utils libapache2-mod-php \
-    php7.2 php7.2-curl php7.2-common php7.2-gd \
-    php7.2-dev php7.2-opcache php7.2-json php7.2-mysql php7.2-readline php7.2-xsl php7.2-xmlrpc \
-    php7.2-intl php7.2-zip php7.2-soap php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php-redis \
-    php7.2-bz2 php7.2-imagick php7.2-xdebug vsftpd telnet \
+    php7.1 php7.1-curl php7.1-common php7.1-gd \
+    php7.1-dev php7.1-opcache php7.1-json php7.1-mysql php7.1-readline php7.1-xsl php7.1-xmlrpc \
+    php7.1-intl php7.1-zip php7.1-soap php7.1-cli php7.1-xml php7.1-mbstring php7.1-bcmath php-redis \
+    php7.1-bz2 php7.1-imagick php7.1-xdebug vsftpd telnet \
     && phpenmod mcrypt xsl imagick \
-    && a2enmod headers rewrite ssl expires php7.2 \
+    && a2enmod headers rewrite ssl expires php7.1 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
-    && update-alternatives --set php /usr/bin/php7.2 \
-    && update-alternatives --set phar /usr/bin/phar7.2 \
-    && update-alternatives --set phar.phar /usr/bin/phar.phar7.2 \
-    && update-alternatives --set phpize /usr/bin/phpize7.2 \
-    && update-alternatives --set php-config /usr/bin/php-config7.2 \
+    && update-alternatives --set php /usr/bin/php7.1 \
+    && update-alternatives --set phar /usr/bin/phar7.1 \
+    && update-alternatives --set phar.phar /usr/bin/phar.phar7.1 \
+    && update-alternatives --set phpize /usr/bin/phpize7.1 \
+    && update-alternatives --set php-config /usr/bin/php-config7.1 \
 
 #
 #   Install Composer
@@ -73,7 +73,7 @@ COPY etc/apache2/ports.conf /etc/apache2/ports.conf
 #
 #   Xdebug setup
 #
-COPY etc/php/7.2/mods-available/xdebug.ini etc/php/7.2/mods-available/xdebug.ini
+COPY etc/php/7.1/mods-available/xdebug.ini etc/php/7.1/mods-available/xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 RUN phpenmod xdebug
 
@@ -82,8 +82,8 @@ RUN a2ensite site site-ssl && service apache2 restart
 
 RUN chown -R builder:www-data /var/www/html
 
-COPY configs/apache2/php.ini /etc/php/7.2/apache2/php.ini
-COPY configs/cli/php.ini /etc/php/7.2/cli/php.ini
+COPY configs/apache2/php.ini /etc/php/7.1/apache2/php.ini
+COPY configs/cli/php.ini /etc/php/7.1/cli/php.ini
 
 #
 #   VSFTPD configs
