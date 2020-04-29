@@ -85,13 +85,6 @@ RUN chown -R builder:www-data /var/www/html
 COPY configs/apache2/php.ini /etc/php/7.2/apache2/php.ini
 COPY configs/cli/php.ini /etc/php/7.2/cli/php.ini
 
-#
-#   VSFTPD configs
-#
-COPY configs/ftpusers /etc/ftpusers
-COPY configs/vsftpd.conf /etc/vsftpd.conf
-RUN service vsftpd restart || true
-
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
 COPY provision/n98magerun2 /usr/local/bin/n98magerun2
