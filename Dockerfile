@@ -16,7 +16,7 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     php7.2 php7.2-curl php7.2-common php7.2-gd \
     php7.2-dev php7.2-opcache php7.2-json php7.2-mysql php7.2-readline php7.2-xsl php7.2-xmlrpc \
     php7.2-intl php7.2-zip php7.2-soap php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php-redis \
-    php7.2-bz2 php7.2-imagick php7.2-xdebug vsftpd telnet \
+    php7.2-bz2 php7.2-imagick php7.2-xdebug telnet \
     && phpenmod mcrypt xsl imagick \
     && a2enmod headers rewrite ssl expires php7.2 \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
@@ -39,12 +39,6 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     cp ./n98-magerun2.phar /usr/local/bin/
 
 RUN echo "root:password123" | chpasswd
-
-#
-#   Configure SSH
-#
-#COPY configs/sshd_config /etc/ssh/sshd_config
-#RUN service ssh restart
 
 #
 #   Install ionCube
