@@ -20,9 +20,9 @@ __THIS IS NOT FOR PRODUCTION USE__
 
 ## Documentation
 ### Services
-* Ubuntu 16.04
+* Ubuntu 18.04
 * Apache 2.4.18
-* PHP 7.2
+* PHP 7.3
 
 ### Packages
 * telnet
@@ -66,7 +66,7 @@ __THIS IS NOT FOR PRODUCTION USE__
 * rewrite
 * ssl
 * expires
-* php7.1
+* php7.3
 
 ## Defaults
 HTTP listen port 80
@@ -117,6 +117,6 @@ su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=aws.solesociety.com'; ph
 ## Extensibility
 
 ## Tags
-`php-7.1`
+`php-7.3`
 
-PHP 7.1
+PHP 7.3
