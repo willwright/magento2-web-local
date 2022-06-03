@@ -58,9 +58,10 @@ COPY etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 #
 #   Xdebug setup
 #
-COPY etc/php/8.1/mods-available/xdebug.ini etc/php/8.1/mods-available/xdebug.ini
+#COPY etc/php/8.1/mods-available/xdebug.ini etc/php/8.1/mods-available/xdebug.ini
+COPY etc/php/8.1/cli/conf.d/20-xdebug.ini /etc/php/8.1/cli/conf.d/20-xdebug.ini
+COPY etc/php/8.1/fpm/conf.d/20-xdebug.ini /etc/php/8.1/fpm/conf.d/20-xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
-RUN phpenmod xdebug
 
 RUN mkdir -p /run/php/
 
