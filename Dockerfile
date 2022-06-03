@@ -15,16 +15,16 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     openssh-server mysql-client mcrypt expat xsltproc \
     nginx
 
-RUN apt-get install -y --allow-unauthenticated php8.0-fpm php8.0-cli php8.0 php8.0-curl php8.0-common php8.0-gd \
-    php8.0-dev php8.0-opcache php8.0-mysql php8.0-readline php8.0-xsl php8.0-xmlrpc \
-    php8.0-intl php8.0-zip php8.0-soap php8.0-cli php8.0-xml php8.0-mbstring php8.0-bcmath php-redis \
-    php8.0-bz2 php8.0-imagick php8.0-xdebug telnet \
+RUN apt-get install -y --allow-unauthenticated php8.1-fpm php8.1-cli php8.1 php8.1-curl php8.1-common php8.1-gd \
+    php8.1-dev php8.1-opcache php8.1-mysql php8.1-readline php8.1-xsl php8.1-xmlrpc \
+    php8.1-intl php8.1-zip php8.1-soap php8.1-cli php8.1-xml php8.1-mbstring php8.1-bcmath php-redis \
+    php8.1-bz2 php8.1-imagick php8.1-xdebug telnet  \
     && phpenmod mcrypt xsl imagick \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
 #
 #   Install Composer
 #
-    && curl -sSL https://getcomposer.org/composer.phar -o /usr/bin/composer \
+    && curl -sSL https://getcomposer.org/download/2.1.14/composer.phar -o /usr/bin/composer \
     && chmod +x /usr/bin/composer \
 #
 #   Install n98-magerun
@@ -43,36 +43,29 @@ RUN echo "root:password123" | chpasswd
 #RUN phpenmod ioncube
 
 #
-#   Delete prepackaged defaults
-#
-RUN #rm -rf /etc/apache2/ports.conf /etc/apache2/sites-enabled/* /var/lib/apt/lists/*
-
-#
-#   Run apache in foreground
-#
-#COPY files/apache2-foreground /usr/local/bin/
-#RUN chmod +x /usr/local/bin/apache2-foreground
-
-#
 #   Inject config files at the end to optimize build cache
 #
-#COPY etc/apache2/sites-available /etc/apache2/sites-available
+COPY configs/nginx/sites-available/magento /etc/nginx/sites-available/magento
 #COPY etc/apache2/ports.conf /etc/apache2/ports.conf
 
 #
 #   Xdebug setup
 #
-COPY etc/php/7.3/mods-available/xdebug.ini etc/php/7.3/mods-available/xdebug.ini
+COPY etc/php/8.1/mods-available/xdebug.ini etc/php/8.1/mods-available/xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 RUN phpenmod xdebug
 
+RUN mkdir -p /run/php/
+RUN /etc/init.d/php8.1-fpm start
 
-#RUN a2ensite site site-ssl && service apache2 restart
+RUN unlink /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/magento /etc/nginx/sites-enabled/magento
+RUN service nginx restart
 
 RUN chown -R builder:www-data /var/www/html
 
-COPY configs/apache2/php.ini /etc/php/7.3/apache2/php.ini
-COPY configs/cli/php.ini /etc/php/7.3/cli/php.ini
+COPY configs/fpm/php.ini /etc/php/8.1/fpm/php.ini
+COPY configs/cli/php.ini /etc/php/8.1/cli/php.ini
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
@@ -83,4 +76,4 @@ RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98m
 
 EXPOSE 80
 WORKDIR /var/www/html/current
-#CMD bash /usr/local/bin/apache2-foreground
+CMD [nginx -g 'daemon off;']
