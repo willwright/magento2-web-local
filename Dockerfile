@@ -8,30 +8,35 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated software-properties-common ntp build-essential build-essential binutils \
-    zlib1g-dev python-pip language-pack-en-base curl wget git acl lzop unzip nano && \
+    zlib1g-dev language-pack-en-base curl wget git acl lzop unzip nano && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
-    apt-get install -y --allow-unauthenticated \
-    openssh-server mysql-client mcrypt expat xsltproc \
-    nginx
+    apt-get install -y --allow-unauthenticated telnet openssh-server mysql-client mcrypt expat xsltproc python3-pip nginx
 
 RUN apt-get install -y --allow-unauthenticated php8.1-fpm php8.1-cli php8.1 php8.1-curl php8.1-common php8.1-gd \
     php8.1-dev php8.1-opcache php8.1-mysql php8.1-readline php8.1-xsl php8.1-xmlrpc \
-    php8.1-intl php8.1-zip php8.1-soap php8.1-cli php8.1-xml php8.1-mbstring php8.1-bcmath php-redis \
-    php8.1-bz2 php8.1-imagick php8.1-xdebug telnet  \
+    php8.1-intl php8.1-zip php8.1-soap php8.1-cli php8.1-xml php8.1-mbstring php8.1-bcmath php8.1-redis \
+    php8.1-bz2 php8.1-imagick php8.1-xdebug \
     && phpenmod mcrypt xsl imagick \
-    && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder \
+    && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder
+
 #
 #   Install Composer
 #
-    && curl -sSL https://getcomposer.org/download/2.1.14/composer.phar -o /usr/bin/composer \
-    && chmod +x /usr/bin/composer \
+RUN curl -sSL https://getcomposer.org/download/2.1.14/composer.phar -o /usr/bin/composer \
+    && chmod +x /usr/bin/composer
+
 #
 #   Install n98-magerun
 #
-    && cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
+RUN cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/
+
+#
+#   Install supervisor
+#
+RUN pip install supervisor
 
 RUN echo "root:password123" | chpasswd
 
@@ -45,8 +50,10 @@ RUN echo "root:password123" | chpasswd
 #
 #   Inject config files at the end to optimize build cache
 #
-COPY configs/nginx/sites-available/magento /etc/nginx/sites-available/magento
-#COPY etc/apache2/ports.conf /etc/apache2/ports.conf
+COPY etc/nginx/sites-available/magento /etc/nginx/sites-available/magento
+COPY etc/php/8.1/fpm/php.ini /etc/php/8.1/fpm/php.ini
+COPY etc/php/8.1/cli/php.ini /etc/php/8.1/cli/php.ini
+COPY etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 #
 #   Xdebug setup
@@ -56,16 +63,11 @@ RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 RUN phpenmod xdebug
 
 RUN mkdir -p /run/php/
-RUN /etc/init.d/php8.1-fpm start
 
 RUN unlink /etc/nginx/sites-enabled/default
 RUN ln -s /etc/nginx/sites-available/magento /etc/nginx/sites-enabled/magento
-RUN service nginx restart
 
 RUN chown -R builder:www-data /var/www/html
-
-COPY configs/fpm/php.ini /etc/php/8.1/fpm/php.ini
-COPY configs/cli/php.ini /etc/php/8.1/cli/php.ini
 
 COPY provision/magento /usr/local/bin/magento
 COPY provision/xmagento /usr/local/bin/xmagento
@@ -76,4 +78,4 @@ RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98m
 
 EXPOSE 80
 WORKDIR /var/www/html/current
-CMD [nginx -g 'daemon off;']
+CMD ["/usr/local/bin/supervisord","-c","/etc/supervisor/supervisord.conf"]
