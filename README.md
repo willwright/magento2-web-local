@@ -130,8 +130,9 @@ su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=local.magento2.com'; php
 ```
 
 ## Extensibility
-
-## Tags
-`php-7.3`
-
-PHP 7.3
+Configuration override locations:
+* `/etc/nginx/sites-available/magento`
+* `/etc/php/8.1/cli/php.ini`
+* `/etc/php/8.1/cli/conf.d/20-xdebug.ini`
+* `/etc/php/8.1/fpm/php.ini`
+* `/etc/php/8.1/fpm/conf.d/20-xdebug.ini`
