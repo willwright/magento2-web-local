@@ -1,2 +1,2 @@
 #!/bin/bash
-su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=local.mage2tv.com'; php -d xdebug.remote_autostart=1 bin/magento $*" www-data
+su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=local.magento2.com'; php -d xdebug.remote_autostart=1 bin/magento $*" www-data
