@@ -13,17 +13,17 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     apt-get update && \
     apt-get install -y --allow-unauthenticated telnet openssh-server mysql-client mcrypt expat xsltproc python3-pip nginx
 
-RUN apt-get install -y --allow-unauthenticated php8.1-fpm php8.1-cli php8.1 php8.1-curl php8.1-common php8.1-gd \
-    php8.1-dev php8.1-opcache php8.1-mysql php8.1-readline php8.1-xsl php8.1-xmlrpc \
-    php8.1-intl php8.1-zip php8.1-soap php8.1-cli php8.1-xml php8.1-mbstring php8.1-bcmath php8.1-redis \
-    php8.1-bz2 php8.1-imagick php8.1-xdebug \
+RUN apt-get install -y --allow-unauthenticated php7.4-fpm php7.4-cli php7.4 php7.4-curl php7.4-common php7.4-gd \
+    php7.4-dev php7.4-opcache php7.4-mysql php7.4-readline php7.4-xsl php7.4-xmlrpc \
+    php7.4-intl php7.4-zip php7.4-soap php7.4-cli php7.4-xml php7.4-mbstring php7.4-bcmath php7.4-redis \
+    php7.4-bz2 php7.4-imagick php7.4-xdebug \
     && phpenmod mcrypt xsl imagick \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder
 
 #
 #   Install Composer
 #
-RUN curl -sSL https://getcomposer.org/download/2.1.14/composer.phar -o /usr/bin/composer \
+RUN curl -sSL https://getcomposer.org/download/1.10.26/composer.phar -o /usr/bin/composer \
     && chmod +x /usr/bin/composer
 
 #
@@ -51,15 +51,15 @@ RUN echo "root:password123" | chpasswd
 #   Inject config files at the end to optimize build cache
 #
 COPY etc/nginx/sites-available/magento /etc/nginx/sites-available/magento
-COPY etc/php/8.1/fpm/php.ini /etc/php/8.1/fpm/php.ini
-COPY etc/php/8.1/cli/php.ini /etc/php/8.1/cli/php.ini
+COPY etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini
+COPY etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini
 COPY etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 #
 #   Xdebug setup
 #
-COPY etc/php/8.1/cli/conf.d/20-xdebug.ini /etc/php/8.1/cli/conf.d/20-xdebug.ini
-COPY etc/php/8.1/fpm/conf.d/20-xdebug.ini /etc/php/8.1/fpm/conf.d/20-xdebug.ini
+COPY etc/php/7.4/cli/conf.d/20-xdebug.ini /etc/php/7.4/cli/conf.d/20-xdebug.ini
+COPY etc/php/7.4/fpm/conf.d/20-xdebug.ini /etc/php/7.4/fpm/conf.d/20-xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 
 RUN mkdir -p /run/php/
