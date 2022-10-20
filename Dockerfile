@@ -23,7 +23,7 @@ RUN apt-get install -y --allow-unauthenticated php8.1-fpm php8.1-cli php8.1 php8
 #
 #   Install Composer
 #
-RUN curl -sSL https://getcomposer.org/download/2.1.14/composer.phar -o /usr/bin/composer \
+RUN curl -sSL https://getcomposer.org/download/2.2.18/composer.phar -o /usr/bin/composer \
     && chmod +x /usr/bin/composer
 
 #
