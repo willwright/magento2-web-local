@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo /bin/su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=myserver.dev.guidevops.com'; php -d xdebug.remote_autostart=1 /usr/local/bin/n98-magerun2.phar $*" www-data
+sudo /bin/su -s "/bin/bash" -c "export PHP_IDE_CONFIG='serverName=local.magento2.com'; php -d xdebug.remote_autostart=1 /usr/local/bin/n98-magerun2.phar $*" www-data
