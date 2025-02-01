@@ -2,13 +2,16 @@ upstream fastcgi_backend {
     # use tcp connection
     # server  127.0.0.1:9000;
     # or socket
-    server unix:/run/php/php8.1-fpm.sock;
+    server unix:/run/php/php8.3-fpm.sock;
 }
 
 server {
     listen 80 default_server;
     set $MAGE_ROOT /var/www/html/current;
     set $MAGE_DEBUG_SHOW_ARGS 0;
+
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
 
     ## Optional override of deployment mode. We recommend you use the
     ## command 'bin/magento deploy:mode:set' to switch modes instead.

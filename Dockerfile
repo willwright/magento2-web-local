@@ -1,6 +1,4 @@
-FROM ubuntu:22.04
-
-MAINTAINER Will Wright <will@magesmith.com>
+FROM ubuntu:24.04
 
 # disable interactive functions
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,19 +9,19 @@ RUN export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && \
     zlib1g-dev language-pack-en-base curl wget git acl lzop unzip nano && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
-    apt-get install -y --allow-unauthenticated telnet openssh-server mysql-client mcrypt expat xsltproc python3-pip nginx
+    apt-get install -y --allow-unauthenticated telnet openssh-server mysql-client mcrypt expat xsltproc supervisor nginx
 
-RUN apt-get install -y --allow-unauthenticated php8.1-fpm php8.1-cli php8.1 php8.1-curl php8.1-common php8.1-gd \
-    php8.1-dev php8.1-opcache php8.1-mysql php8.1-readline php8.1-xsl php8.1-xmlrpc \
-    php8.1-intl php8.1-zip php8.1-soap php8.1-cli php8.1-xml php8.1-mbstring php8.1-bcmath php8.1-redis \
-    php8.1-bz2 php8.1-imagick php8.1-xdebug \
+RUN apt-get install -y --allow-unauthenticated php8.3-fpm php8.3-cli php8.3 php8.3-curl php8.3-common php8.3-gd \
+    php8.3-dev php8.3-opcache php8.3-mysql php8.3-readline php8.3-xsl php8.3-xmlrpc \
+    php8.3-intl php8.3-zip php8.3-soap php8.3-cli php8.3-xml php8.3-mbstring php8.3-bcmath php8.3-redis \
+    php8.3-bz2 php8.3-imagick php8.3-xdebug \
     && phpenmod mcrypt xsl imagick \
     && adduser --ui 501 --ingroup www-data --shell /bin/bash --home /home/builder builder
 
 #
 #   Install Composer
 #
-RUN curl -sSL https://getcomposer.org/download/2.2.18/composer.phar -o /usr/bin/composer \
+RUN curl -sSL https://getcomposer.org/download/2.7.9/composer.phar -o /usr/bin/composer \
     && chmod +x /usr/bin/composer
 
 #
@@ -32,11 +30,6 @@ RUN curl -sSL https://getcomposer.org/download/2.2.18/composer.phar -o /usr/bin/
 RUN cd ~ && wget https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/
-
-#
-#   Install supervisor
-#
-RUN pip install supervisor
 
 RUN echo "root:password123" | chpasswd
 
@@ -51,15 +44,15 @@ RUN echo "root:password123" | chpasswd
 #   Inject config files at the end to optimize build cache
 #
 COPY etc/nginx/sites-available/magento /etc/nginx/sites-available/magento
-COPY etc/php/8.1/fpm/php.ini /etc/php/8.1/fpm/php.ini
-COPY etc/php/8.1/cli/php.ini /etc/php/8.1/cli/php.ini
+COPY etc/php/8.3/fpm/php.ini /etc/php/8.3/fpm/php.ini
+COPY etc/php/8.3/cli/php.ini /etc/php/8.3/cli/php.ini
 COPY etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 #
 #   Xdebug setup
 #
-COPY etc/php/8.1/cli/conf.d/20-xdebug.ini /etc/php/8.1/cli/conf.d/20-xdebug.ini
-COPY etc/php/8.1/fpm/conf.d/20-xdebug.ini /etc/php/8.1/fpm/conf.d/20-xdebug.ini
+COPY etc/php/8.3/cli/conf.d/20-xdebug.ini /etc/php/8.3/cli/conf.d/20-xdebug.ini
+COPY etc/php/8.3/fpm/conf.d/20-xdebug.ini /etc/php/8.3/fpm/conf.d/20-xdebug.ini
 RUN touch /var/log/xdebug.log && chmod a+rwx /var/log/xdebug.log
 
 RUN mkdir -p /run/php/
@@ -76,6 +69,11 @@ COPY provision/xn98magerun2 /usr/local/bin/xn98magerun2
 
 RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98magerun2 /usr/local/bin/xn98magerun2
 
+#
+#   Log nginx to stdout
+#
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+
 EXPOSE 80
 WORKDIR /var/www/html/current
-CMD ["/usr/local/bin/supervisord","-c","/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord","-c","/etc/supervisor/supervisord.conf"]
