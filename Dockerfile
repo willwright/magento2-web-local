@@ -72,7 +72,7 @@ RUN chmod a+x /usr/local/bin/magento /usr/local/bin/xmagento /usr/local/bin/n98m
 #
 #   Log nginx to stdout
 #
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+# RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80
 WORKDIR /var/www/html/current
